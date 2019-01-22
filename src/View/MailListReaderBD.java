@@ -1,35 +1,45 @@
+
 package view;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import model.Mail;
 
-public class MailListReader {
+public class MailListReaderBD {
 
-    private List<String> list;
+    public List<String> read() throws SQLException {
 
-    public MailListReader() throws FileNotFoundException, IOException{
-        list = new ArrayList<String>();
+        String sql = "SELECT Mail FROM EMAIL";
+        List<String> mail = new ArrayList<>();
 
-        File file = new File("C:\\Users\\carlo\\OneDrive\\Documentos\\NetBeansProjects\\Kata4\\src\\view\\email.txt");
-        BufferedReader bf;
-        bf = new BufferedReader(new FileReader(file));
+        try(Connection con  = this.connect();
+            Statement stmt  = con.createStatement();
+            ResultSet rs    = stmt.executeQuery(sql)){
 
-        String s;
-        while((s = bf.readLine()) != null){
-            if(s.contains("@")) list.add(new Mail().getMail(s));
+            while(rs.next()){
+                mail.add(rs.getString("Mail"));
+            }
         }
 
-
+        return mail;
     }
 
-    public List<String> getList() {
-        return list;
+    private Connection connect() {
+        String url = "jdbc:sqlite:KATA5.db";
+
+        Connection con = null;
+        try {
+            con = DriverManager.getConnection(url);
+            System.out.println("Conexion establecida");
+        } catch( SQLException e){
+            System.out.println(e.getMessage());
+        }
+
+        return con;
     }
 
 }

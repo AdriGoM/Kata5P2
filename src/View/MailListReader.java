@@ -16,7 +16,7 @@ public class MailListReader {
     public MailListReader() throws FileNotFoundException, IOException{
         list = new ArrayList<String>();
 
-        File file = new File("C:\\Users\\carlo\\OneDrive\\Documentos\\NetBeansProjects\\Kata4\\src\\view\\email.txt");
+        File file = new File("/Users/adriangodoymartinez/Documents/Kata5P2/src/email.txt");
         BufferedReader bf;
         bf = new BufferedReader(new FileReader(file));
 
